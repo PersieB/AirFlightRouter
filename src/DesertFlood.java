@@ -131,10 +131,10 @@ public class DesertFlood {
 		System.out.println("Yes donkey, you have now set the weights of the airports peacefully");
 		
 		// Testing
-		Airports H = airportHashmap.get("100");
-		Airports G = airportHashmap.get("7");
+		Airports H = airportHashmap.get("4161");
+		Airports G = airportHashmap.get("5556");
 		System.out.println(G.getAirport_id() + " ************** " + H.getAirport_id());
-		GraphPath<Airports, Route> path = airportGraph.ShortestDijkstra(G,H);
+		GraphPath<Airports, Route> path = airportGraph.ShortestDijkstra(H,G);
 		List<Route> pathRoutes = path.getEdgeList();
 		for(Route f:pathRoutes) {
 			System.out.println(f.getAirlineID() + " : " + f.getAirlineCode() + ". Flying from " + f.getSourceAirportCode()
