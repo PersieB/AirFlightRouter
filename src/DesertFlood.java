@@ -132,7 +132,7 @@ public class DesertFlood {
 		
 		// Testing
 		Airports H = airportHashmap.get("4161");
-		Airports G = airportHashmap.get("5556");
+		Airports G = airportHashmap.get("248");
 		System.out.println(G.getAirport_id() + " ************** " + H.getAirport_id());
 		GraphPath<Airports, Route> path = airportGraph.ShortestDijkstra(H,G);
 		List<Route> pathRoutes = path.getEdgeList();
