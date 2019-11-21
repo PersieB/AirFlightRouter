@@ -38,6 +38,7 @@ public class DesertFlood2 {
 			distance = Math.pow(distance, 2) + Math.pow(height, 2);
 		    return Math.sqrt(distance);
 		}
+		
 
 	public static void main(String[] args) throws IOException {
 	
