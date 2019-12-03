@@ -50,11 +50,16 @@ public class GraphImplementation {
 		return temp.getAllPaths(depart, arrival, simplePathOnly, max);
 	}
 	
-	//Implementing Dijkstra's Algorithm
+	/*//Implementing Dijkstra's Algorithm
 	public GraphPath<Airports, Route> ShortestDijkstra(Airports A, Airports B){
 		DijkstraShortestPath<Airports, Route> temp = new DijkstraShortestPath<Airports, Route>(this.BaseGraph);
 		return temp.getPath(A, B);
 	}
+	*/
 	
-	
+	// Plagiarism checker
+	public GraphPath<Airports, Route> privateDijkstra(Airports A, Airports B){
+		ShortestIterator temp = new ShortestIterator(this.BaseGraph, A, Double.POSITIVE_INFINITY);
+		return temp.getFinalPath(A, B);
+	}
 }
