@@ -6,7 +6,7 @@ import org.jgrapht.*;
 public class DesertFlood {
 	
 	// This method will permit us to read a CSV file, and returns a list of string arrays, with the data in the various columns as members
-	public static List<String[]> readCSV(String csvName) throws IOException {
+	public List<String[]> readCSV(String csvName) throws IOException {
 		List<String[]> finalFile = new LinkedList<String[]>();
         File file = new File(csvName);
         FileReader reader = new FileReader(file);
@@ -23,7 +23,7 @@ public class DesertFlood {
 
 	// This method takes in two airport objects, and calculates the distance between them using the Haversine formula
 	// This should serve as the weight of the edges between this two graphs
-	public static double airportDistance(Airports A, Airports B) {
+	public double airportDistance(Airports A, Airports B) {
 		double latA = A.getLatitude();
 		double longA = A.getLongitude();
 		double latB = B.getLatitude();
@@ -42,7 +42,7 @@ public class DesertFlood {
 	}
 	
 	// This method will be used to find the highest connected vertex
-	public static String getMaxConnected(HashMap<String, PrivateLinkedList> hashMap) {
+	public String getMaxConnected(HashMap<String, PrivateLinkedList> hashMap) {
 		Set<String> graphKeys = hashMap.keySet();
 		int h = 0;
 		String current = "";
@@ -55,7 +55,7 @@ public class DesertFlood {
 		return current;
 	}
 	
-	public static void printPaths(int id1, int id2, HashMap<String, Airports> airportHashmap, GraphImplementation airportGraph) {
+	public void printPaths(int id1, int id2, HashMap<String, Airports> airportHashmap, GraphImplementation airportGraph) {
 		Airports H = airportHashmap.get("" + id1);
 		Airports G = airportHashmap.get("" + id2);
 		System.out.println(H.getName() + ", in " + H.getCity() + ": " + H.getCountry() + " to " + " ************** " + G.getName() + ", in " + G.getCity() + ": " + G.getCountry());
@@ -66,6 +66,8 @@ public class DesertFlood {
 								+ ": " + f.getSourceAirportID() + " TO " + f.getDestinationAirportCode() + " : " + f.getDestinationAirportID()
 					);
 		}
+		System.out.println("Your total displacement will be approximately: " + Math.round(airportDistance(H,G)/1000.0) + " kilometers.");
+		
 		
 	}
 	
@@ -73,9 +75,11 @@ public class DesertFlood {
 	
 	public static void main(String[] args) throws IOException {
 		
+		DesertFlood current = new DesertFlood();
+		
 		// Creating an instance of the Graph implementation
 		GraphImplementation airportGraph = new GraphImplementation();
-		List<String[]> temp = readCSV("airports.csv");
+		List<String[]> temp = current.readCSV("airports.csv");
 		
 		// Creating the needed hashmaps
 		HashMap<String, Airports> airportHashmap = new HashMap<String, Airports>();
@@ -100,7 +104,7 @@ public class DesertFlood {
 		}
 		
 		// Reading the routes and storing them in a HashMap appropriately 
-		List<String[]> routesTemp = readCSV("routes.csv");
+		List<String[]> routesTemp = current.readCSV("routes.csv");
 		for(String[] c:routesTemp) {
 			RouteID routeID = new RouteID(c[3], c[5]);
 			String d;
@@ -151,7 +155,7 @@ public class DesertFlood {
 			String destID = c.getDestinationAirportID();
 			Airports sourceAirport = airportHashmap.get(sourceID);
 			Airports destAirport = airportHashmap.get(destID);
-			airportGraph.BaseGraph.setEdgeWeight(c, airportDistance(sourceAirport, destAirport));
+			airportGraph.BaseGraph.setEdgeWeight(c, current.airportDistance(sourceAirport, destAirport));
 			
 		}
 		
@@ -172,7 +176,7 @@ public class DesertFlood {
 			Airports sourceAirport = airportHashmap.get(sourceID);
 			Airports destAirport = airportHashmap.get(destID);
 			try {
-				double distance = airportDistance(sourceAirport, destAirport);
+				double distance = current.airportDistance(sourceAirport, destAirport);
 				PrivateLinkedList.Node newNode = new PrivateLinkedList.Node(destAirport, distance);
 				PrivateLinkedList possibleFlights = graphHashMap.get(sourceID);
 				if(possibleFlights == null) {
@@ -199,7 +203,7 @@ public class DesertFlood {
 			Airports sourceAirport = airportHashmap.get(sourceID);
 			Airports destAirport = airportHashmap.get(destID);
 			try {
-				double distance = airportDistance(sourceAirport, destAirport);
+				double distance = current.airportDistance(sourceAirport, destAirport);
 				PrivateLinkedList.Node newNode = new PrivateLinkedList.Node(sourceAirport, distance);
 				PrivateLinkedList possibleFlights = graphHashMap2.get(destID);
 				if(possibleFlights == null) {
@@ -218,27 +222,27 @@ public class DesertFlood {
 		
 		System.out.println("*********** DEMO FOR MOST IMPORTANT AIRPORTS **************\n" );
 		// Getting the airport with the highest number of departing flights
-		String highestLeaving = getMaxConnected(graphHashMap);
+		String highestLeaving = current.getMaxConnected(graphHashMap);
 		System.out.println("The airport from which one can go to the highest number of airports is: " );
 		System.out.println(airportHashmap.get(highestLeaving).getName() + " and has " + graphHashMap.get(highestLeaving).lengthList() + " departing\n" );
 		
 		// Getting the airport that recieves flights from the highest number of flights
-		String highestRecieving = getMaxConnected(graphHashMap2);
+		String highestRecieving = current.getMaxConnected(graphHashMap2);
 		System.out.println("The airport that recieves most flights is: " );
 		System.out.println(airportHashmap.get(highestRecieving).getName() + " recieves " + graphHashMap2.get(highestRecieving).lengthList() + " flights\n" );
 		
 		System.out.println("*********** DEMO FOR SHORTEST PATHS **************\n" );
 		// Demonstrating the shortest path between Yaounde International Airport and Kotoka International Airport
-		printPaths(4161, 248, airportHashmap, airportGraph );
+		current.printPaths(4161, 248, airportHashmap, airportGraph );
 		System.out.println("\n\n" );
 		
 		// Demonstrating the shortest path between Kotoka International Airport and Hartsfield Jackson Atlanta International Airport
-		printPaths(248,3682, airportHashmap, airportGraph );
+		current.printPaths(248,3682, airportHashmap, airportGraph );
 		System.out.println("\n\n" );
 		
 		
 		// Demonstrating the shortest path between Ngjiva Pereira Airport (Angola) and London Heathrow Airport
-		printPaths(5632,507, airportHashmap, airportGraph );
+		current.printPaths(5632,507, airportHashmap, airportGraph );
 		System.out.println("\n\n" );
 		
 		System.out.println("\n\n\nPun Alert!! Thank you Dr Korsah, we learned a lot from this data structures project:)");
