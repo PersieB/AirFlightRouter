@@ -1,6 +1,7 @@
 # Data-Structures-Project2019
 This project contains our work for the end of the fall semester 2019 for the data structures class. 
-This project helps users to identify the shortest way to travel from one airport to another and many other important things by using graphs.
+This project helps users to identify the shortest way to travel from one airport to another and many other important things by using graphs. It also helps users to find the busiest and most important airports ie the airports with the highest number of departing and receiving flights.
+
 In our work, we use Graphs, HashTables, and Lists extensively.
 
 The project has some problems, as the airports and airline csv files do not seem to be the most up-to-date files.
